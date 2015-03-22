@@ -15,34 +15,110 @@ applied the variable importance function and found that there was a drop off in 
 low overall scores.</p>
 </br>
 <h3>Figure 1: Model 1 Variable Importance</h3>
-<p>                     Overall
-num_window           100.000
-roll_belt             64.681
-pitch_forearm         39.350
-yaw_belt              33.833
-magnet_dumbbell_z     29.867
-magnet_dumbbell_y     29.476
-pitch_belt            28.868
-roll_forearm          23.137
-accel_dumbbell_y      14.438
-magnet_dumbbell_x     11.443
-accel_forearm_x       11.354
-roll_dumbbell         10.444
-accel_belt_z          10.227
-total_accel_dumbbell   9.449
-magnet_belt_z          7.952
-accel_dumbbell_z       7.623
-magnet_belt_y          7.235
-magnet_forearm_z       6.920
-magnet_belt_x          6.236
-roll_arm               5.700</p>  
+<table border="1" style="width:100%">
+ <tr>
+   <td>Rank</td>
+   <td>Feature Name</td>
+   <td>Importance</td>
+ </tr>
+ <tr>
+   <td>1</td>
+   <td>num_window</td>
+   <td>100.00</td>
+ </tr>
+ <tr>
+   <td>2</td>
+   <td>roll_belt</td>
+   <td>64.681</td>
+ </tr>
+ <tr>
+   <td>3</td>
+   <td>pitch_forearm</td>
+   <td>39.350</td>
+ </tr>
+ <tr>
+   <td>4</td>
+   <td>yaw_belt</td>
+   <td>33.833</td>
+ </tr>
+ <tr>
+   <td>5</td>
+   <td>magnet_dumbbell_z</td>
+   <td>29.867</td>
+ </tr>
+ <tr>
+   <td>6</td>
+   <td>magnet_dumbbell_y</td>
+   <td>29.476</td>
+ </tr>
+ <tr>
+   <td>7</td>
+   <td>pitch_belt</td>
+   <td>28.868</td>
+ </tr>
+ <tr>
+   <td>8</td>
+   <td>roll_forearm</td>
+   <td>23.137</td>
+ </tr>
+ <tr>
+   <td>9</td>
+   <td>accel_dumbbell_y</td>
+   <td>14.438</td>
+ </tr>
+ <tr>
+   <td>10</td>
+   <td>magnet_dumbbell_x</td>
+   <td>11.443</td>
+ </tr>
+ <tr>
+   <<td>11</td>
+   <td>accel_forearm_x</td>
+   <td>11.354</td>
+ </tr>
+ <tr>
+   <td>12</td>
+   <td>roll_dumbbell</td>
+   <td>10.444</td>
+ </tr>
+ <tr>
+   <td>13</td>
+   <td>accel_belt_z</td>
+   <td>10.227</td>
+ </tr>
+ <tr>
+   <td>14 - 20</td> 
+   <td>seven other features</td>
+   <td>under 9.450</td>
+ </tr>
+</table>              
 <h2>Cross-Validation</h2>
-<p></p>
+<p>After eliminating the NA rows, near zero rows, and other rows of assessed limited value, I used the createDataPartition function to create a training set and test set.  To build the initial model I used 2-Fold cross validation for speed, since the goal of this model was to eliminate less important features.  For the second model I used 10-Fold cross validation. I chose 10 folds to balance bias and variance-- smaller ks would have more bias towards the training data, but less variance.  Larger ks would have less bias, but more variance.</p>
 <h2>Expected Out of Sample Error</h2>
-<p></p>
+<p>Because I used k-fold cross validation to pick predictors, I estimated my out of sample error on the independent test set.  I used a confusion matrix on the predicted results vs. actual results.  Accuracy was 100%.</p>
+<h2>R Code</h2>
+<p>setwd('/Users/marqueze/machinelearning')
+library(caret)
+lift<-read.csv('pml-training.csv', na.strings=c('NA', '#DIV/0!'))
+naval<-which(as.numeric(colSums(is.na(lift)))>19200) #100 columns
+newlift<- subset(lift, select = -(naval))
+nzv<-nearZeroVar(newlift, saveMetrics=TRUE)
+newlift<- subset(newlift, select = -(c(new_window, raw_timestamp_part_1, raw_timestamp_part_2,
+                                       cvtd_timestamp, X, user_name)))
+inTrain <- createDataPartition(newlift$classe, p = .75, list=FALSE)
+training<-newlift[inTrain,]
+test<-newlift[-inTrain,]
 
-
-<p>This is the index page for my final project.</p>
+set.seed(1555)
+crtl<-trainControl(method="cv", number=10)
+modFit <- train(classe~ .,data=training, method="rf", prox=TRUE, trControl=crtl)
+varImp(modFit)
+modFit2<-train(classe ~ num_window + roll_belt + pitch_forearm + yaw_belt + 
+                 magnet_dumbbell_z + magnet_dumbbell_y + pitch_belt + roll_forearm+
+                 accel_dumbbell_y, data=training, method="rf", prox=TRUE,
+               trControl=crtl)
+confusionMatrix(test$classe, predict(modFit2, test))</p>
+</br>
 <p>March 21, 2015</p>
 </body>
 </html>
