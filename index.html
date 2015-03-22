@@ -11,8 +11,7 @@ such as 'user_name', several time stamp variables, and the 'X' variable, which a
 observation number.</p>
 </br>
 <p>I used the caret package to build an initial random forest model used 53 features to predict the classe.  I
-applied the variable importance function and found that there was a drop off in importance after the top nine features (see Figure 1).  I then built a second random forest model using the top 9 features, which is the version I used for submission due to time considerations.  After applying variable importance to the second model, I found that I could likely remove the 'accel_dumbbell_y' variable and possibly the 'roll_forearm' as they received very
-low overall scores.</p>
+applied the variable importance function and found that there was a drop off in importance after the top nine features (see Figure 1).  I then built a second random forest model using the top 9 features, which is the version I used for submission due to time considerations.  After applying variable importance to the second model, I found that I could likely remove the 'accel_dumbbell_y' variable and possibly the 'roll_forearm' as they received very low overall scores.</p>
 </br>
 <h3>Figure 1: Model 1 Variable Importance</h3>
 <table border="1" style="width:100%">
