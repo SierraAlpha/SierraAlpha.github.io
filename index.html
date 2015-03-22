@@ -11,9 +11,9 @@ such as 'user_name', several time stamp variables, and the 'X' variable, which a
 observation number.</p>
 </br>
 <p>I used the caret package to build an initial random forest model used 53 features to predict the classe.  I
-applied the variable importance function and found that there was a drop off in importance after the top nine features (see Figure 1).  I then built a second random forest model using the top 9 features, which is the version I used for submission due to time considerations.  After applying variable importance to the second model, I found that I could likely remove the 'accel_dumbbell_y' variable and possibly the 'roll_forearm' as they received very low overall scores.</p>
+applied the variable importance function and found that there was a drop off in importance after the top nine features (see Figure 1).</p>
 </br>
-<h3>Figure 1: Model 1 Variable Importance</h3>
+<h3>Figure 1: Model 1 Variable Importance (Top 20)</h3>
 <table border="1" style="width:100%">
  <tr>
    <td>Rank</td>
@@ -90,11 +90,138 @@ applied the variable importance function and found that there was a drop off in 
    <td>seven other features</td>
    <td>under 9.450</td>
  </tr>
-</table>              
+</table>    
+</br>
+<p>I then built a second random forest model using the top 9 features, which is the version I used for submission due to time considerations.  After applying variable importance to the second model, I found that I could likely remove the 'accel_dumbbell_y' variable and possibly the 'roll_forearm' as they received very low overall scores (see Figure 2).</p>   
+</br>
+<h3>Figure 2: Model 2 Variable Importance</h3>
+<table border="1" style="width:100%">
+ <tr>
+   <td>Rank</td>
+   <td>Feature Name</td>
+   <td>Importance</td>
+ </tr>
+ <tr>
+   <td>1</td>
+   <td>num_window</td>
+   <td>100.00</td>
+ </tr>
+ <tr>
+   <td>2</td>
+   <td>roll_belt</td>
+   <td>57.276</td>
+ </tr>
+ <tr>
+   <td>3</td>
+   <td>yaw_belt</td>
+   <td>335.449</td>
+ </tr>
+ <tr>
+   <td>4</td>
+   <td>pitch_belt</td>
+   <td>20.421</td>
+ </tr>
+ <tr>
+   <td>5</td>
+   <td>pitch_forearm</td>
+   <td>19.072</td>
+ </tr>
+ <tr>
+   <td>6</td>
+   <td>magnet_dumbbell_y</td>
+   <td>16.091</td>
+ </tr>
+ <tr>
+   <td>7</td>
+   <td>magnet_dumbbell_z</td>
+   <td>12.992</td>
+ </tr>
+ <tr>
+   <td>8</td>
+   <td>roll_forearm</td>
+   <td>1.168</td>
+ </tr>
+ <tr>
+   <td>9</td>
+   <td>accel_dumbbell_y</td>
+   <td>0.000</td>
+ </tr>
+</table>    
+</br>     
 <h2>Cross-Validation</h2>
 <p>After eliminating the NA rows, near zero rows, and other rows of assessed limited value, I used the createDataPartition function to create a training set and test set.  To build the initial model I used 2-Fold cross validation for speed, since the goal of this model was to eliminate less important features.  For the second model I used 10-Fold cross validation. I chose 10 folds to balance bias and variance-- smaller ks would have more bias towards the training data, but less variance.  Larger ks would have less bias, but more variance.</p>
 <h2>Expected Out of Sample Error</h2>
-<p>Because I used k-fold cross validation to pick predictors, I estimated my out of sample error on the independent test set.  I used a confusion matrix on the test set's predicted outcomes vs. actual outcomes.  Accuracy was 100%.</p>
+<p>Because I used k-fold cross validation to pick predictors, I estimated my out of sample error on the independent test set.  I used a confusion matrix on the test set's predicted outcomes vs. actual outcomes(see Figure 3).  Accuracy was 100%.</p>
+</br>
+<h3>Figure 3: Model 2 Confusion Matrix</h3>
+<table border="1" style="width:100%">
+ <tr>
+   <td>Reference</td>
+ </tr>
+ <tr>
+   <td>Prediction</td>
+   <td>A</td>
+   <td>B</td>
+   <td>C</td>
+   <td>D</td>
+   <td>E</td>
+ </tr>
+ <tr>
+   <td>A</td>
+   <td>1395</td>
+   <td>0</td>
+   <td>0</td>
+   <td>0</td>
+   <td>0</td>
+ </tr>
+ <tr>
+   <td>B</td>
+   <td>0</td>
+   <td>949</td>
+   <td>0</td>
+   <td>0</td>
+   <td>0</td>
+ </tr>
+ <tr>
+   <td>C</td>
+   <td>0</td>
+   <td>0</td>
+   <td>855</td>
+   <td>0</td>
+   <td>0</td>
+ </tr>
+ <tr>
+   <<td>D</td>
+   <td>0</td>
+   <td>0</td>
+   <td>0</td>
+   <td>804</td>
+   <td>0</td>
+ </tr>
+ <tr>
+   <td>E</td>
+   <td>0</td>
+   <td>0</td>
+   <td>0</td>
+   <td>0</td>
+   <td>901</td>
+ </tr>
+ <tr>
+   <td>7</td>
+   <td>magnet_dumbbell_z</td>
+   <td>12.992</td>
+ </tr>
+ <tr>
+   <td>8</td>
+   <td>roll_forearm</td>
+   <td>1.168</td>
+ </tr>
+ <tr>
+   <td>9</td>
+   <td>accel_dumbbell_y</td>
+   <td>0.000</td>
+ </tr>
+</table> 
 <h2>R Code</h2>
 <p>setwd('/Users/marqueze/machinelearning')</p>
 <p>library(caret)</p>
