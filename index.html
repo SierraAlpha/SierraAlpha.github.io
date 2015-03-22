@@ -97,27 +97,28 @@ low overall scores.</p>
 <h2>Expected Out of Sample Error</h2>
 <p>Because I used k-fold cross validation to pick predictors, I estimated my out of sample error on the independent test set.  I used a confusion matrix on the predicted results vs. actual results.  Accuracy was 100%.</p>
 <h2>R Code</h2>
-<p>setwd('/Users/marqueze/machinelearning')
-library(caret)
-lift<-read.csv('pml-training.csv', na.strings=c('NA', '#DIV/0!'))
-naval<-which(as.numeric(colSums(is.na(lift)))>19200) #100 columns
-newlift<- subset(lift, select = -(naval))
-nzv<-nearZeroVar(newlift, saveMetrics=TRUE)
-newlift<- subset(newlift, select = -(c(new_window, raw_timestamp_part_1, raw_timestamp_part_2,
-                                       cvtd_timestamp, X, user_name)))
-inTrain <- createDataPartition(newlift$classe, p = .75, list=FALSE)
-training<-newlift[inTrain,]
-test<-newlift[-inTrain,]
-
-set.seed(1555)
-crtl<-trainControl(method="cv", number=10)
-modFit <- train(classe~ .,data=training, method="rf", prox=TRUE, trControl=crtl)
-varImp(modFit)
-modFit2<-train(classe ~ num_window + roll_belt + pitch_forearm + yaw_belt + 
-                 magnet_dumbbell_z + magnet_dumbbell_y + pitch_belt + roll_forearm+
-                 accel_dumbbell_y, data=training, method="rf", prox=TRUE,
-               trControl=crtl)
-confusionMatrix(test$classe, predict(modFit2, test))</p>
+<p>setwd('/Users/marqueze/machinelearning')</p>
+<p>library(caret)</p>
+<p>lift<-read.csv('pml-training.csv', na.strings=c('NA', '#DIV/0!'))</p>
+<p>naval<-which(as.numeric(colSums(is.na(lift)))>19200) #100 columns</p>
+<p>newlift<- subset(lift, select = -(naval))</p>
+<p>nzv<-nearZeroVar(newlift, saveMetrics=TRUE)</p>
+<p>newlift<- subset(newlift, select = -(c(new_window, raw_timestamp_part_1, raw_timestamp_part_2,</p>
+<p>                                    cvtd_timestamp, X, user_name)))</p>
+<p>inTrain <- createDataPartition(newlift$classe, p = .75, list=FALSE)</p>
+<p>training<-newlift[inTrain,]</p>
+<p>test<-newlift[-inTrain,]</p>
+<p></p>
+<p>set.seed(1555)</p>
+<p>crtl<-trainControl(method="cv", number=2)</p>
+<p>modFit <- train(classe~ .,data=training, method="rf", prox=TRUE, trControl=crtl)</p>
+<p>varImp(modFit)</p>
+<p>crtl<-trainControl(method="cv", number=10)</p>
+<p>modFit2<-train(classe ~ num_window + roll_belt + pitch_forearm + yaw_belt + </p>
+<p>              magnet_dumbbell_z + magnet_dumbbell_y + pitch_belt + roll_forearm+</p>
+<p>              accel_dumbbell_y, data=training, method="rf", prox=TRUE,</p>
+<p>              trControl=crtl)</p>
+<p>confusionMatrix(test$classe, predict(modFit2, test))</p>
 </br>
 <p>March 21, 2015</p>
 </body>
