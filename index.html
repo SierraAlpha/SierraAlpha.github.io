@@ -1,7 +1,47 @@
 <!DOCTYPE html>
 <html>
 <body>
-<h1>Coursera: Machine Learning</h1>
+<h1>Machine Learning: Final Project</h1>
+<h2>Cleaning the Data and Building the Model</h2>
+<p>I began by exploring the data, specifically looking for large segments of NA values.
+I chose to remove columns that had over 19200 NA values, and then applied near-zero variance,
+which led me to remove the 'new_window' variable.  I also examined the variable names and removed
+several variables that did not seem like they would have significant impact on the outcome, 
+such as 'user_name', several time stamp variables, and the 'X' variable, which appeared to be an
+observation number.</p>
+</br>
+<p>I used the caret package to build an initial random forest model used 53 features to predict the classe.  I
+applied the variable importance function and found that there was a drop off in importance after the top nine features (see Figure 1).  I then built a second random forest model using the top 9 features, which is the version I used for submission due to time considerations.  After applying variable importance to the second model, I found that I could likely remove the 'accel_dumbbell_y' variable and possibly the 'roll_forearm' as they received very
+low overall scores.</p>
+</br>
+<h3>Figure 1: Model 1 Variable Importance</h3>
+<p>                     Overall
+num_window           100.000
+roll_belt             64.681
+pitch_forearm         39.350
+yaw_belt              33.833
+magnet_dumbbell_z     29.867
+magnet_dumbbell_y     29.476
+pitch_belt            28.868
+roll_forearm          23.137
+accel_dumbbell_y      14.438
+magnet_dumbbell_x     11.443
+accel_forearm_x       11.354
+roll_dumbbell         10.444
+accel_belt_z          10.227
+total_accel_dumbbell   9.449
+magnet_belt_z          7.952
+accel_dumbbell_z       7.623
+magnet_belt_y          7.235
+magnet_forearm_z       6.920
+magnet_belt_x          6.236
+roll_arm               5.700</p>  
+<h2>Cross-Validation</h2>
+<p></p>
+<h2>Expected Out of Sample Error</h2>
+<p></p>
+
+
 <p>This is the index page for my final project.</p>
 <p>March 21, 2015</p>
 </body>
